@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "ग्रंथ प्रबंधन",
+      "hasCanvas": false,
+      "bodyTextLen": 476,
+      "bodyTextHash": "0a632fc4bfb34b6f53aadcdb30ea232d829d9746c6f8b5f36df178c642e338c7",
+      "bodyTextPrefix": "ग्रंथ प्रबंधन — विषय / प्रश्नोत्तरी — पवित्र ग्रन्थ — नए प्रमाण ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "ग्रंथ प्रबंधन",
+      "hasCanvas": false,
+      "bodyTextLen": 443,
+      "bodyTextHash": "a9310c5684427d1a59ee8cf1484f8bc238d72f4a1756c551446f34c65d592857",
+      "bodyTextPrefix": "ग्रंथ प्रबंधन — विषय / प्रश्नोत्तरी — पवित्र ग्रन्थ — नए प्रमाण ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
