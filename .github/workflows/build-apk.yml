@@ -25,29 +25,46 @@ jobs:
           cache: npm
           cache-dependency-path: mobile/package-lock.json
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Make Gradle executable
         run: chmod +x android/gradlew
 
       - name: Build Debug APK
         run: |
-          mkdir -p ~/.gradle
-          echo "kotlin.suppressUnsupportedVersionErrors=true" >> ~/.gradle/gradle.properties
-          echo "systemProp.org.gradle.project.kotlin.suppressUnsupportedVersionErrors=true" >> ~/.gradle/gradle.properties
+          mkdir -p ~/.gradle/init.d
+          cat << 'EOF' > ~/.gradle/init.d/kotlin-fix.gradle
+          allprojects {
+              tasks.configureEach { task ->
+                  if (task.name.toLowerCase().contains("kotlin")) {
+                      try {
+                          task.kotlinOptions.freeCompilerArgs = (task.kotlinOptions.freeCompilerArgs ?: []) + [
+                              "-Xskip-metadata-version-check",
+                              "-Xskip-prerelease-check",
+                              "-Xallow-unstable-dependencies"
+                          ]
+                      } catch (Throwable t) {}
+                      try {
+                          task.compilerOptions.freeCompilerArgs.addAll([
+                              "-Xskip-metadata-version-check",
+                              "-Xskip-prerelease-check",
+                              "-Xallow-unstable-dependencies"
+                          ])
+                      } catch (Throwable t) {}
+                  }
+              }
+          }
+          EOF
           echo "kotlin.suppressUnsupportedVersionErrors=true" >> android/gradle.properties
-          if [ -d "node_modules/expo-modules-autolinking/android/expo-gradle-plugin" ]; then
-            echo "kotlin.suppressUnsupportedVersionErrors=true" >> node_modules/expo-modules-autolinking/android/expo-gradle-plugin/gradle.properties
-          fi
           cd android
-          ./gradlew assembleDebug -Dorg.gradle.project.kotlin.suppressUnsupportedVersionErrors=true -Pkotlin.suppressUnsupportedVersionErrors=true
+          ./gradlew assembleDebug --init-script ~/.gradle/init.d/kotlin-fix.gradle
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
