@@ -39,8 +39,15 @@ jobs:
 
       - name: Build Debug APK
         run: |
+          mkdir -p ~/.gradle
+          echo "kotlin.suppressUnsupportedVersionErrors=true" >> ~/.gradle/gradle.properties
+          echo "systemProp.org.gradle.project.kotlin.suppressUnsupportedVersionErrors=true" >> ~/.gradle/gradle.properties
+          echo "kotlin.suppressUnsupportedVersionErrors=true" >> android/gradle.properties
+          if [ -d "node_modules/expo-modules-autolinking/android/expo-gradle-plugin" ]; then
+            echo "kotlin.suppressUnsupportedVersionErrors=true" >> node_modules/expo-modules-autolinking/android/expo-gradle-plugin/gradle.properties
+          fi
           cd android
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug -Dorg.gradle.project.kotlin.suppressUnsupportedVersionErrors=true -Pkotlin.suppressUnsupportedVersionErrors=true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
